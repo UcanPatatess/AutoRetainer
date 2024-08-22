@@ -1,4 +1,5 @@
-﻿using AutoRetainerAPI;
+﻿using AutoRetainer.Scheduler.Tasks;
+using AutoRetainerAPI;
 using AutoRetainerAPI.Configuration;
 using ECommons.EzIpcManager;
 using ECommons.Reflection;
@@ -30,6 +31,7 @@ internal static class IPC
         Svc.PluginInterface.GetIpcProvider<string, object>(ApiConsts.RequestCharacterPostProcess).RegisterAction(RequestCharacterPostprocess);
         Svc.PluginInterface.GetIpcProvider<object>(ApiConsts.FinishCharacterPostprocessRequest).RegisterAction(FinishCharacterPostprocessRequest);
         Svc.PluginInterface.GetIpcProvider<string, object>(ApiConsts.OnRetainerListCustomTask).RegisterAction(OnRetainerListCustomTask);
+        Svc.PluginInterface.GetIpcProvider<object>("AutoRetainer.QuickSellItemsEnable").RegisterAction(QuickSellItemsEnable);
         EzIPC.Init(typeof(IPC));
     }
 
@@ -57,6 +59,7 @@ internal static class IPC
         Svc.PluginInterface.GetIpcProvider<string, object>(ApiConsts.RequestCharacterPostProcess).UnregisterAction();
         Svc.PluginInterface.GetIpcProvider<object>(ApiConsts.FinishCharacterPostprocessRequest).UnregisterAction();
         Svc.PluginInterface.GetIpcProvider<string, object>(ApiConsts.OnRetainerListCustomTask).UnregisterAction();
+        Svc.PluginInterface.GetIpcProvider<object>("AutoRetainer.QuickSellItemsEnable").UnregisterAction();
     }
 
     private static void FinishRetainerPostprocessRequest()
@@ -162,6 +165,11 @@ internal static class IPC
     {
         MultiMode.Enabled = s;
         MultiMode.OnMultiModeEnabled();
+    }
+
+    private static void QuickSellItemsEnable()
+    {
+        TaskVendorItems.Enqueue();
     }
 
     internal static void FireSendRetainerToVentureEvent(string retainer)
