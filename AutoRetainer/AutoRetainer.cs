@@ -248,6 +248,10 @@ public unsafe class AutoRetainer : IDalamudPlugin
             MultiMode.Enabled = !MultiMode.Enabled;
             MultiMode.OnMultiModeEnabled();
         }
+        else if (arguments.EqualsIgnoreCaseAny("quicksell"))
+        {
+            TaskVendorItems.Enqueue();
+        }
         else if(arguments.StartsWithAny(StringComparison.OrdinalIgnoreCase, "m ", "multi "))
         {
             var arg2 = arguments.Split(" ")[1];
